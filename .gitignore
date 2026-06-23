@@ -1,0 +1,39 @@
+# Build directories
+build/
+build-*/
+dist/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# CMake cache
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+CMakeCache.txt
+
+# Archives
+*.zip
+*.tar.gz
+*.tar.bz2
+
+# Temporary files
+*.tmp
+*.log
+
+# Platform-specific
+console/build/
+console/CMakeCache.txt
+console/CMakeFiles/
+console/platform
+console/libhivemind.so
