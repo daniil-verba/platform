@@ -24,8 +24,32 @@ void receiveLoop() {
     
     while (running) {
         if (hivemind_receive(g_hivemind, sender_ip, &sender_port, message, sizeof(message))) {
+            std::string msg(message);
+            
+            // Обработка системных сообщений
+            if (msg.find("PRESENCE:") == 0) {
+                // Формат: PRESENCE:NAME:IP:PORT
+                std::string rest = msg.substr(9);
+                size_t pos1 = rest.find(':');
+                if (pos1 != std::string::npos) {
+                    std::string name = rest.substr(0, pos1);
+                    rest = rest.substr(pos1 + 1);
+                    size_t pos2 = rest.find(':');
+                    if (pos2 != std::string::npos) {
+                        std::string ip = rest.substr(0, pos2);
+                        uint16_t port = static_cast<uint16_t>(std::stoi(rest.substr(pos2 + 1)));
+                        
+                        // Автоматически добавляем пользователя
+                        hivemind_register_name(g_hivemind, name.c_str());  // Обновит свой реестр
+                        std::cout << "\n\x1b[36m[System] " << name << " is online (" << ip << ":" << port << ")\x1b[0m" << std::endl;
+                        std::cout << "> " << std::flush;
+                        continue;
+                    }
+                }
+            }
+            
             std::cout << "\n\x1b[32m[Received from " << sender_ip << ":" << sender_port << "]:\x1b[0m " 
-                      << message << std::endl;
+                      << msg << std::endl;
             std::cout << "> " << std::flush;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -34,11 +58,12 @@ void receiveLoop() {
 
 void printHelp() {
     std::cout << "\n\x1b[33mCommands:\x1b[0m" << std::endl;
-    std::cout << "  /register <name>              - Register your name" << std::endl;
+    std::cout << "  /reg <name>              - Register your name" << std::endl;
     std::cout << "  /msg <name> <message>         - Send message by name" << std::endl;
     std::cout << "  /send <IP> <PORT> <message>   - Send message by IP" << std::endl;
     std::cout << "  /find <name>                  - Find user by name" << std::endl;
     std::cout << "  /myip                         - Show your public IP" << std::endl;
+    std::cout << "  /users                        - Show all known users" << std::endl;
     std::cout << "  /sync                         - Sync with network" << std::endl;
     std::cout << "  /help                         - Show this help" << std::endl;
     std::cout << "  /quit                         - Exit" << std::endl;
@@ -51,6 +76,7 @@ int main() {
     std::cout << "\n\x1b[36m╔══════════════════════════════════════════════════════════╗\x1b[0m" << std::endl;
     std::cout << "\x1b[36m║   Platform P2P Messenger v0.5 (STUN only)                ║\x1b[0m" << std::endl;
     std::cout << "\x1b[36m║   Russian STUN → Google STUN → Local IP                  ║\x1b[0m" << std::endl;
+    std::cout << "\x1b[36m║   Type /reg <name> to join the network              ║\x1b[0m" << std::endl;
     std::cout << "\x1b[36m╚══════════════════════════════════════════════════════════╝\x1b[0m" << std::endl;
     std::cout << std::endl;
     
@@ -74,21 +100,9 @@ int main() {
     
     std::cout << "\n\x1b[32m✓ Started on port " << port << "\x1b[0m" << std::endl;
     
-    std::cout << "Enter your name: ";
-    std::string name;
-    std::getline(std::cin, name);
-    
-    if (!name.empty()) {
-        if (hivemind_register_name(g_hivemind, name.c_str())) {
-            std::cout << "\x1b[32m✓ Registered as: " << name << "\x1b[0m" << std::endl;
-            
-            char ip[64];
-            if (hivemind_get_public_ip(g_hivemind, ip, sizeof(ip))) {
-                std::cout << "  Public IP: \x1b[36m" << ip << "\x1b[0m" << std::endl;
-            }
-        } else {
-            std::cout << "\x1b[33m⚠ Failed to register name (try /register later)\x1b[0m" << std::endl;
-        }
+    char ip[64];
+    if (hivemind_get_public_ip(g_hivemind, ip, sizeof(ip))) {
+        std::cout << "  Your public IP: \x1b[36m" << ip << "\x1b[0m" << std::endl;
     }
     
     hivemind_sync_with_network(g_hivemind);
@@ -111,14 +125,16 @@ int main() {
         else if (input == "/help" || input == "/h") {
             printHelp();
         }
-        else if (input.substr(0, 9) == "/register") {
-            std::string newName = input.substr(10);
+        else if (input.substr(0, 4) == "/reg") {
+            std::string newName = input.substr(5);
             if (!newName.empty()) {
                 if (hivemind_register_name(g_hivemind, newName.c_str())) {
                     std::cout << "\x1b[32m✓ Registered as: " << newName << "\x1b[0m" << std::endl;
                 } else {
                     std::cout << "\x1b[31m✗ Failed to register\x1b[0m" << std::endl;
                 }
+            } else {
+                std::cout << "Usage: /reg <name>" << std::endl;
             }
         }
         else if (input.substr(0, 4) == "/msg") {
@@ -145,12 +161,12 @@ int main() {
                 std::cout << "Usage: /send <IP> <PORT> <message>" << std::endl;
                 continue;
             }
-            std::string ip = rest.substr(0, first);
+            std::string targetIp = rest.substr(0, first);
             std::string portStr = rest.substr(first + 1, second - first - 1);
             std::string message = rest.substr(second + 1);
             
             uint16_t targetPort = static_cast<uint16_t>(std::stoi(portStr));
-            if (hivemind_send_to_ip(g_hivemind, ip.c_str(), targetPort, message.c_str())) {
+            if (hivemind_send_to_ip(g_hivemind, targetIp.c_str(), targetPort, message.c_str())) {
                 std::cout << "\x1b[32m✓ Sent\x1b[0m" << std::endl;
             } else {
                 std::cout << "\x1b[31m✗ Failed to send\x1b[0m" << std::endl;
@@ -158,21 +174,25 @@ int main() {
         }
         else if (input.substr(0, 5) == "/find") {
             std::string targetName = input.substr(6);
-            char ip[64];
-            uint16_t port;
-            if (hivemind_find_user(g_hivemind, targetName.c_str(), ip, &port)) {
-                std::cout << "\x1b[32mFound: " << targetName << " -> " << ip << ":" << port << "\x1b[0m" << std::endl;
+            char foundIp[64];
+            uint16_t foundPort;
+            if (hivemind_find_user(g_hivemind, targetName.c_str(), foundIp, &foundPort)) {
+                std::cout << "\x1b[32mFound: " << targetName << " -> " << foundIp << ":" << foundPort << "\x1b[0m" << std::endl;
             } else {
                 std::cout << "\x1b[33mUser not found: " << targetName << "\x1b[0m" << std::endl;
             }
         }
         else if (input == "/myip") {
-            char ip[64];
-            if (hivemind_get_public_ip(g_hivemind, ip, sizeof(ip))) {
-                std::cout << "\x1b[32mPublic IP: \x1b[36m" << ip << "\x1b[0m" << std::endl;
+            char myIp[64];
+            if (hivemind_get_public_ip(g_hivemind, myIp, sizeof(myIp))) {
+                std::cout << "\x1b[32mPublic IP: \x1b[36m" << myIp << "\x1b[0m" << std::endl;
             } else {
                 std::cout << "\x1b[33mCould not determine public IP\x1b[0m" << std::endl;
             }
+        }
+        else if (input == "/users") {
+            // Показываем всех известных пользователей (заглушка — позже реализуем)
+            std::cout << "\x1b[33mUse /find <name> to search for specific user\x1b[0m" << std::endl;
         }
         else if (input == "/sync") {
             hivemind_sync_with_network(g_hivemind);

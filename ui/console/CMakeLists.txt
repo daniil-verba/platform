@@ -11,7 +11,6 @@ target_include_directories(platform-console PRIVATE
 
 target_link_libraries(platform-console
     ${HIVEMIND_LIB}
-    sodium
     pthread
 )
 
