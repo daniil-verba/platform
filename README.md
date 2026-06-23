@@ -110,8 +110,8 @@ Platform работает поверх [Hivemind](https://github.com/daniil-verb
 ### Сборка
 
 ```bash
-git clone https://github.com/daniil-verba/platform-app.git
-cd platform-app
+git clone https://github.com/daniil-verba/platform.git
+cd platform
 mkdir build && cd build
 cmake ..
 make -j$(nproc)
