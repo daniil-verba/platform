@@ -1,5 +1,30 @@
 .
 ├── CMakeLists.txt
+├── CODE_OF_CONDUCT.md
+├── console
+│   ├── build
+│   │   ├── CMakeCache.txt
+│   │   └── CMakeFiles
+│   │       ├── 4.3.3
+│   │       │   ├── CMakeCCompiler.cmake
+│   │       │   ├── CMakeCXXCompiler.cmake
+│   │       │   ├── CMakeDetermineCompilerABI_C.bin
+│   │       │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │       │   ├── CMakeSystem.cmake
+│   │       │   ├── CompilerIdC
+│   │       │   │   ├── a.out
+│   │       │   │   ├── CMakeCCompilerId.c
+│   │       │   │   └── tmp
+│   │       │   └── CompilerIdCXX
+│   │       │       ├── a.out
+│   │       │       ├── CMakeCXXCompilerId.cpp
+│   │       │       └── tmp
+│   │       ├── cmake.check_cache
+│   │       ├── CMakeConfigureLog.yaml
+│   │       ├── CMakeScratch
+│   │       └── pkgRedirects
+│   └── CMakeLists.txt
+├── CONTRIBUTING.md
 ├── libs
 │   ├── hivemind
 │   │   ├── api.h
@@ -8,6 +33,8 @@
 │   │   ├── types.h
 │   │   └── version.h
 │   └── libhivemind.so
+├── LICENSE
+├── README.md
 ├── src
 │   └── core
 │       └── src
@@ -86,7 +113,6 @@
     │   └── settings.gradle.kts
     ├── console
     │   ├── build
-    │   │   ├── build.zip
     │   │   ├── CMakeCache.txt
     │   │   ├── CMakeFiles
     │   │   │   ├── 4.3.3
@@ -135,4 +161,4 @@
     └── desktop
         └── main.cpp
 
-52 directories, 84 files
+62 directories, 100 files

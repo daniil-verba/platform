@@ -1,32 +1,31 @@
 cmake_minimum_required(VERSION 3.10)
-project(Platform)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(HIVEMIND_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/hivemind)
+set(HIVEMIND_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/libhivemind.so)
 
-add_executable(platform main.cpp)
+add_executable(platform-console main.cpp)
 
-# Путь к заголовкам Hivemind (на уровень выше в libs/hivemind)
-target_include_directories(platform PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs
+target_include_directories(platform-console PRIVATE
+    ${HIVEMIND_INCLUDE}
 )
 
-# Путь к библиотеке (на уровень выше в libs)
-target_link_directories(platform PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../libs
-)
-
-# Линкуем Hivemind и libsodium (который нужен Hivemind)
-target_link_libraries(platform
-    hivemind
+target_link_libraries(platform-console
+    ${HIVEMIND_LIB}
     sodium
     pthread
 )
 
-# Копируем .so в папку сборки (для удобства запуска)
-add_custom_command(TARGET platform POST_BUILD
+add_custom_command(TARGET platform-console POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_SOURCE_DIR}/../libs/libhivemind.so
+        ${HIVEMIND_LIB}
         ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Copying libhivemind.so to build directory"
+)
+
+add_custom_command(TARGET platform-console POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+        platform-console
+        ${CMAKE_CURRENT_BINARY_DIR}/platform
+    COMMENT "Creating symlink platform -> platform-console"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
