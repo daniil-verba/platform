@@ -1,29 +1,6 @@
 .
 ├── CMakeLists.txt
 ├── CODE_OF_CONDUCT.md
-├── console
-│   ├── build
-│   │   ├── CMakeCache.txt
-│   │   └── CMakeFiles
-│   │       ├── 4.3.3
-│   │       │   ├── CMakeCCompiler.cmake
-│   │       │   ├── CMakeCXXCompiler.cmake
-│   │       │   ├── CMakeDetermineCompilerABI_C.bin
-│   │       │   ├── CMakeDetermineCompilerABI_CXX.bin
-│   │       │   ├── CMakeSystem.cmake
-│   │       │   ├── CompilerIdC
-│   │       │   │   ├── a.out
-│   │       │   │   ├── CMakeCCompilerId.c
-│   │       │   │   └── tmp
-│   │       │   └── CompilerIdCXX
-│   │       │       ├── a.out
-│   │       │       ├── CMakeCXXCompilerId.cpp
-│   │       │       └── tmp
-│   │       ├── cmake.check_cache
-│   │       ├── CMakeConfigureLog.yaml
-│   │       ├── CMakeScratch
-│   │       └── pkgRedirects
-│   └── CMakeLists.txt
 ├── CONTRIBUTING.md
 ├── libs
 │   ├── hivemind
@@ -113,52 +90,9 @@
     │   └── settings.gradle.kts
     ├── console
     │   ├── build
-    │   │   ├── CMakeCache.txt
-    │   │   ├── CMakeFiles
-    │   │   │   ├── 4.3.3
-    │   │   │   │   ├── CMakeCCompiler.cmake
-    │   │   │   │   ├── CMakeCXXCompiler.cmake
-    │   │   │   │   ├── CMakeDetermineCompilerABI_C.bin
-    │   │   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
-    │   │   │   │   ├── CMakeSystem.cmake
-    │   │   │   │   ├── CompilerIdC
-    │   │   │   │   │   ├── a.out
-    │   │   │   │   │   ├── CMakeCCompilerId.c
-    │   │   │   │   │   └── tmp
-    │   │   │   │   └── CompilerIdCXX
-    │   │   │   │       ├── a.out
-    │   │   │   │       ├── CMakeCXXCompilerId.cpp
-    │   │   │   │       └── tmp
-    │   │   │   ├── cmake.check_cache
-    │   │   │   ├── CMakeConfigureLog.yaml
-    │   │   │   ├── CMakeDirectoryInformation.cmake
-    │   │   │   ├── CMakeScratch
-    │   │   │   ├── InstallScripts.json
-    │   │   │   ├── Makefile2
-    │   │   │   ├── Makefile.cmake
-    │   │   │   ├── pkgRedirects
-    │   │   │   ├── platform.dir
-    │   │   │   │   ├── build.make
-    │   │   │   │   ├── cmake_clean.cmake
-    │   │   │   │   ├── compiler_depend.make
-    │   │   │   │   ├── compiler_depend.ts
-    │   │   │   │   ├── DependInfo.cmake
-    │   │   │   │   ├── depend.make
-    │   │   │   │   ├── flags.make
-    │   │   │   │   ├── link.d
-    │   │   │   │   ├── link.txt
-    │   │   │   │   ├── main.cpp.o
-    │   │   │   │   ├── main.cpp.o.d
-    │   │   │   │   └── progress.make
-    │   │   │   ├── progress.marks
-    │   │   │   └── TargetDirectories.txt
-    │   │   ├── cmake_install.cmake
-    │   │   ├── libhivemind.so
-    │   │   ├── Makefile
-    │   │   └── platform
     │   ├── CMakeLists.txt
     │   └── main.cpp
     └── desktop
         └── main.cpp
 
-62 directories, 100 files
+43 directories, 53 files

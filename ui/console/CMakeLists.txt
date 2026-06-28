@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(HIVEMIND_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/hivemind)
-set(HIVEMIND_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/libhivemind.so)
+set(HIVEMIND_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/../../../Hivemind-lib/include)
+set(HIVEMIND_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../../../Hivemind-lib/build/libhivemind.so)
 
 add_executable(platform-console main.cpp)
 
